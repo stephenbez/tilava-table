@@ -25,8 +25,8 @@ element.  It can be used for any html element such as `<div>`s.
 Getting Started
 ---------------
 
-* [Example](http://***/example.html)
-* [Tutorial](http://***/tutorial.html)
+* [Example](http://stephenbez.github.com/tilava-table/example.html)
+* [Tutorial](http://stephenbez.github.com/tilava-table/tutorial.html)
 
 Frequently Asked Questions
 --------------------------
