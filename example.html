@@ -1,0 +1,144 @@
+<html>
+<head>
+    <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="tilava-table.js"></script>
+    <title>Tilava Table Example</title>
+    <style type="text/css">
+        table, th, td { border: 1px solid black; }
+        .template { display: none; }
+
+        tr.even td { background-color: #eee; }
+        tr.odd  td { background-color: #fff; }
+    </style>
+    <script type="text/javascript">
+        function getRows(howMany) {
+            var records = [];
+            for (var i = 0; i < howMany; i++) {
+                records.push({
+                    time: "2012-01-04 11:07:27",
+                    transactionId: rowNum,
+                    category: (Math.random() > .5) ? "Hardlines" : "Softlines",
+                    price: Math.floor(Math.random() * 1000),
+                    quantity: Math.floor(Math.random() * 25)
+                });
+
+                rowNum++;
+            }
+
+            return records;
+        }
+
+        function setupClickHandlers() {
+            $("#clear").click(function() {
+                t.clear();
+            });
+
+            $("#append-100k").click(function() {
+                t.appendRecords(getRows(100000));
+            });
+
+            $("#append-1").click(function() {
+                t.appendRecords(getRows(1));
+            });
+
+            $("#prepend-100k").click(function() {
+                t.prependRecords(getRows(100000));
+            });
+
+            $("#prepend-1").click(function() {
+                t.prependRecords(getRows(1));
+            });
+
+            $("#insert").click(function() {
+                t.insertRecord($("#insert-index").val(), getRows(1)[0]);
+            });
+
+            $("#remove").click(function() {
+                t.removeRecord($("#remove-index").val());
+            });
+        }
+
+        // global just so I can inspect from the console
+        var t;
+        var rowNum = 0;
+
+        $(document).ready(function() {
+            setupClickHandlers();
+
+            var rows = getRows(100000);
+
+            var start = new Date().getTime();
+
+            t = new TilavaTable({
+                parent: $('#transactionTable tbody'),
+                template: $('#transactionTable tbody .template'),
+                render: function(row, record, index) {
+                    row.find(".time").text(record.time);
+                    row.find(".transactionId").text(record.transactionId);
+                    row.find(".category").text(record.category);
+                    row.find(".price").text("$" + record.price);
+                    row.find(".quantity").text(record.quantity);
+                    if (index % 2 == 0) {
+                        row.addClass("even");
+                    } else {
+                        row.addClass("odd");
+                    }
+                },
+                visibleRows: 10,
+                displayReversed: false
+            });
+
+            t.appendRecords(rows);
+
+            var end = new Date().getTime();
+            console.log("time to render (ms): ", end-start);
+        });
+    </script>
+</head>
+
+<body>
+<h1>Tilava Table Example</h1>
+
+<div>
+<button id="clear">Clear Table</button><br/>
+<button id="append-100k">Append 100k rows</button><br/>
+<button id="append-1">Append row</button><br/>
+
+<button id="prepend-100k">Prepend 100k rows</button><br/>
+<button id="prepend-1">Prepend row</button><br/>
+
+<button id="insert">Insert row</button><label for="insert-index"> @ Index </label><input id="insert-index" type="text" size="7" value="0"/><br/>
+<button id="remove">Remove row</button><label for="remove-index"> @ Index </label><input id="remove-index" type="text" size="7" value="0"/><br/>
+<br/>
+</div>
+<p>Example for displaying e-commerce transactions:</p>
+<div>
+    <table id="transactionTable" >
+        <thead>
+        <tr>
+            <th>Time</th>
+            <th>Transaction Id</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="template">
+            <td><span class="time"></span></td>
+            <td><span class="transactionId"></span></td>
+            <td><span class="category"></span></td>
+            <td><span class="price"></span></td>
+            <td><span class="quantity"></span></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<p>
+<a href="tutorial.html">See the tutorial</a>
+</p>
+</body>
+
+</html>

@@ -1,0 +1,156 @@
+<html>
+  <head>
+    <title>Tilava Table Tutorial</title>
+    <style type="text/css">
+      .code {
+        border: 1px solid #eeeeee;
+        background-color: #dddddd;
+      }
+      body {
+        font-family: sans-serif;
+      }
+
+        table, th, td { border: 1px solid black; }
+        .template { display: none; }
+    </style>
+    <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="tilava-table.js"></script>
+    <script type="text/javascript" src="jquery.mousewheel.js"></script>
+  </head>
+  <body>
+    <h1>Tilava Table Tutorial</h1>
+    <p>Tilava Table is a simple library for displaying large amounts of data without slowing the browser down.</p>
+
+    <h3>1. Include tilava-table.js</h3>
+    <p>Copy <a href="tilava-table.js">tilava-table.js</a> to your project and include it:</p>
+    <pre class="code">&lt;script type="text/javascript" src="<a href="tilava-table.js">tilava-table.js</a>"&gt;&lt;/script&gt;</pre>
+    <p>Tilava Table also requires <a href="http://docs.jquery.com/Downloading_jQuery">jQuery</a> so include that as well:</p>
+    <pre class="code">&lt;script type="text/javascript" src="<a href="jquery-1.7.1.min.js">jquery-1.7.1.min.js</a>"&gt;&lt;/script&gt;</pre>
+    <p>Optional: If you want the table to scroll when the mouse wheel is moved while hovering over the table, you must include <a href="https://github.com/brandonaaron/jquery-mousewheel">jquery-mousewheel</a>:</p>
+    <pre class="code">&lt;script type="text/javascript" src="<a href="jquery.mousewheel.js">jquery.mousewheel.js</a>"&gt;&lt;/script&gt;</pre>
+    <h3>2. Create an html table</h3>
+    <pre class="code">
+&lt;table id=&quot;transactionTable&quot; &gt;
+        &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Time&lt;/th&gt;
+            &lt;th&gt;Transaction Id&lt;/th&gt;
+            &lt;th&gt;Category&lt;/th&gt;
+            &lt;th&gt;Price&lt;/th&gt;
+            &lt;th&gt;Quantity&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+        &lt;tr class=&quot;template&quot;&gt;
+            &lt;td&gt;&lt;span class=&quot;time&quot;&gt;&lt;/span&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;span class=&quot;transactionId&quot;&gt;&lt;/span&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;span class=&quot;category&quot;&gt;&lt;/span&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;span class=&quot;price&quot;&gt;&lt;/span&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;span class=&quot;quantity&quot;&gt;&lt;/span&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+</pre>
+
+    <p>Notice the row with the class "template".  This row is going to be cloned to create additional rows.  Be sure that in the css, the class template is set to "display: none;"</p>
+
+    <h3>3. Create the tilava table</h3>
+    <pre class="code">
+t = new TilavaTable({
+                parent: $('#transactionTable tbody'),
+                template: $('#transactionTable tbody .template'),
+                render: function(row, record, index) {
+                    row.find(".time").text(record.time);
+                    row.find(".transactionId").text(record.transactionId);
+                    row.find(".category").text(record.category);
+                    row.find(".price").text("$" + record.price);
+                    row.find(".quantity").text(record.quantity);
+                },
+                visibleRows: 10,
+            });</pre>
+    <p>There are some important parameters to TilavaTable.</p>
+    <p><strong>parent</strong> is a jQuery object for the tbody of the table.  Additional rows will be children of this element.</p>
+    <p><strong>template </strong> is a jQuery object for the row that will be cloned for additional rows.</p>
+    <p><strong>render</strong> is a callback that gets called whenever the tilava table wishes to display a row.  It takes three parameters: row is the empty cloned template row, record is the javascript object that represents the data, and index is the index of the row into the table.  The function should put the data into the empty row.</p>
+    <p><strong>visibleRows</strong> is the maximum number of rows to be displayed at one time.  When more than this many are present, a scroll bar will appear.</p>
+    <p><strong>displayReversed</strong>.  When true, elements are displayed in reverse order.  When a record is appeneded, it shows up at the top of the table.</p>
+    
+    <h3>4. Add some data</h3>
+    <p>To add data, call the appendRecord function on the tilava table:</p>
+    <pre class="code">
+for (var i = 0; i < 100; i++) {
+    t.appendRecord({
+        time: "2012-01-04 11:07:27",
+        transactionId: i,
+        category: "Hardlines",
+        price: 1.23,
+        quantity: 10
+});
+}</pre>
+
+    <div>
+        <table id="transactionTable" >
+            <thead>
+            <tr>
+                <th>Time</th>
+                <th>Transaction Id</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="template">
+                <td><span class="time"></span></td>
+                <td><span class="transactionId"></span></td>
+                <td><span class="category"></span></td>
+                <td><span class="price"></span></td>
+                <td><span class="quantity"></span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+<script type="text/javascript">
+    t = new TilavaTable({
+                    parent: $('#transactionTable tbody'),
+                    template: $('#transactionTable tbody .template'),
+                    render: function(row, record, index) {
+                        row.find(".time").text(record.time);
+                        row.find(".transactionId").text(record.transactionId);
+                        row.find(".category").text(record.category);
+                        row.find(".price").text("$" + record.price);
+                        row.find(".quantity").text(record.quantity);
+                    },
+                    visibleRows: 10,
+                });
+    for (var i = 0; i < 100; i++) {
+        t.appendRecord({
+            time: "2012-01-04 11:07:27",
+            transactionId: i,
+            category: "Hardlines",
+            price: 1.23,
+            quantity: 10
+    });
+    }
+</script>
+    
+    <h3>5. Additional functions</h3>
+    <p>There are a number of functions for modifying the data in the table:</p>
+    <p><strong>clear()</strong> removes all data from the table.</p>
+    <p><strong>appendRecord(record)</strong> add a single record to the end of the table.  Prefer to use appendRecords when adding many records as it is more efficient.</p>
+    <p><strong>appendRecords(records)</strong> add an array of records to the end of the table.</p>
+    <p><strong>prependRecord(record)</strong> add a single record to the beginning of the table.  Prefer to use prependRecords when adding many records as it is more efficient.</p>
+    <p><strong>prependRecords(records)</strong> add an array of records to the beginning of the table.</p>
+    <p><strong>insertRecord(index, record)</strong> insert a record at the specified index and shift all the remaining records down.</p>
+    <p><strong>removeRecord(index)</strong> remove the record at the specified index and shift the rest down.</p>
+
+    <h3>6. Adding additional features</h3>
+    <p>The TilavaTable api provides no functions for common table operations such as sorting or filtering.</p>
+    <p>You can add these yourself by keeping a local copy of all the data.  Clearing the table, sorting or filtering and then adding all the data back into the table.</p>
+
+    <h3>That's it.</h3>
+
+    <p>View the <a href="example.html">finished example</a>.</p>
+  </body>
+</html>
