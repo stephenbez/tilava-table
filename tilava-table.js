@@ -199,13 +199,24 @@ TilavaTable.prototype.displayRecords = function(startIndex) {
 
     var endIndex = Math.min(this.records.length - 1, (startIndex + this.spec.visibleRows - 1));
 
+    var k = 0;
     if (this.spec.displayReversed) {
-        for (var j = this.records.length - 1 - startIndex; j >= this.records.length - 1 - endIndex; j--) {
+        for (var j = this.records.length - 1 - startIndex; j >= this.records.length - 1 - endIndex; j--, k++) {
             this.renderIndex(j);
+            if (this.spec.visibleRows == Infinity && document.body.scrollHeight != window.innerHeight){
+                this.spec.visibleRows = k;
+                this.displayRecords(startIndex);
+                break;
+            }
         }
     } else {
-        for (var i = startIndex; i <= endIndex; i++) {
+        for (var i = startIndex; i <= endIndex; i++, k++) {
             this.renderIndex(i);
+            if (this.spec.visibleRows == Infinity && document.body.scrollHeight != window.innerHeight){
+                this.spec.visibleRows = k;
+                this.displayRecords(startIndex);
+                break;
+            }
         }
     }
 
