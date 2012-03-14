@@ -199,7 +199,7 @@ TilavaTable.prototype.updateUI = function() {
 };
 
 function windowCurrentlyHasScrollBars() {
-    return document.body.scrollHeight != window.innerHeight;
+    return document.body.scrollHeight > document.body.clientHeight;
 }
 
 TilavaTable.prototype.displayRecords = function(startIndex) {
