@@ -72,8 +72,8 @@ t = new TilavaTable({
     <p><strong>parent</strong> is a jQuery object for the tbody of the table.  Additional rows will be children of this element.</p>
     <p><strong>template </strong> is a jQuery object for the row that will be cloned for additional rows.</p>
     <p><strong>render</strong> is a callback that gets called whenever the tilava table wishes to display a row.  It takes three parameters: row is the empty cloned template row, record is the javascript object that represents the data, and index is the index of the row into the table.  The function should put the data into the empty row.</p>
-    <p><strong>visibleRows</strong> is the maximum number of rows to be displayed at one time.  When more than this many are present, a scroll bar will appear.</p>
-    <p><strong>displayReversed</strong>.  When true, elements are displayed in reverse order.  When a record is appeneded, it shows up at the top of the table.</p>
+    <p><strong>visibleRows</strong> is the maximum number of rows to be displayed at one time.  When more than this many are present, a scroll bar will appear.  Set to Infinity to show as many rows as possible before forcing the whole page to have a scrollbar.</p>
+    <p><strong>displayReversed</strong>.  When true, elements are displayed in reverse order.  When a record is appended, it shows up at the top of the table.</p>
     
     <h3>4. Add some data</h3>
     <p>To add data, call the appendRecord function on the tilava table:</p>

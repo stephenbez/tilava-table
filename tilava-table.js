@@ -34,7 +34,8 @@ function bound(number, lower, upper) {
  *
  *   visibleRows [int]:
  *     Max number of rows that should be visible at any time. Any more than that and the
- *     scrollbar appears.
+ *     scrollbar appears.  Set to Infinity to show as many rows as possible before forcing the
+ *     whole page to have a scrollbar.
  *
  * --- Optional settings ---
  *
@@ -60,6 +61,15 @@ window.TilavaTable = function(spec) {
     this.spec.displayReversed = this.spec.displayReversed || false;
     this.spec.tableWrapperClassName = this.spec.tableWrapperClassName || 'tilava-table-wrapper';
     this.spec.scrollbarClassName = this.spec.scrollbarClassName || 'tilava-table-scrollbar';
+
+    if (this.spec.visibleRows === Infinity) {
+        // On resize, set visible rows to infinity, so that it is again set to the appropriate value that doesn't cause scrolling
+        $(window).resize(function () {
+            that.spec.visibleRows = Infinity;
+            that.updateUI();
+        });
+    }
+
 
     // Default scroll wheel pixels by OS: Linux=53; Windows=100;
     this.spec.scrollWheelPixels = this.spec.scrollWheelPixels || 53;
@@ -188,6 +198,10 @@ TilavaTable.prototype.updateUI = function() {
     }
 };
 
+function windowCurrentlyHasScrollBars() {
+    return document.body.scrollHeight != window.innerHeight;
+}
+
 TilavaTable.prototype.displayRecords = function(startIndex) {
     this.currentIndex = startIndex;
 
@@ -203,8 +217,10 @@ TilavaTable.prototype.displayRecords = function(startIndex) {
     if (this.spec.displayReversed) {
         for (var j = this.records.length - 1 - startIndex; j >= this.records.length - 1 - endIndex; j--, k++) {
             this.renderIndex(j);
-            if (this.spec.visibleRows == Infinity && document.body.scrollHeight != window.innerHeight){
-                this.spec.visibleRows = k;
+
+            if (this.spec.visibleRows == Infinity && windowCurrentlyHasScrollBars()){
+                // To avoid confusion of a table that appears empty, but actually has elements in it, display a minimum of 3 rows
+                this.spec.visibleRows = bound(k, 3, Infinity);
                 this.displayRecords(startIndex);
                 break;
             }
@@ -212,8 +228,10 @@ TilavaTable.prototype.displayRecords = function(startIndex) {
     } else {
         for (var i = startIndex; i <= endIndex; i++, k++) {
             this.renderIndex(i);
-            if (this.spec.visibleRows == Infinity && document.body.scrollHeight != window.innerHeight){
-                this.spec.visibleRows = k;
+
+            if (this.spec.visibleRows == Infinity && windowCurrentlyHasScrollBars()){
+                // To avoid confusion of a table that appears empty, but actually has elements in it, display a minimum of 3 rows
+                this.spec.visibleRows = bound(k, 3, Infinity);
                 this.displayRecords(startIndex);
                 break;
             }
