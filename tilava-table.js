@@ -70,7 +70,6 @@ window.TilavaTable = function(spec) {
         });
     }
 
-
     // Default scroll wheel pixels by OS: Linux=53; Windows=100;
     this.spec.scrollWheelPixels = this.spec.scrollWheelPixels || 53;
 
@@ -106,6 +105,19 @@ window.TilavaTable = function(spec) {
 
         that.$scrollbarDiv.scrollTop(newPosition);
     });
+
+    var adjustScrollbarForZoom = function () {
+        // Chrome specific hack for positioning scrollbar correctly after zooming in and out
+        var screenCssPixelRatio = (window.outerWidth - 8) / window.innerWidth;
+        var newWidth = Math.ceil(15/screenCssPixelRatio);
+        $("." + that.spec.scrollbarClassName).css("right", -newWidth).css("width", newWidth);
+        console.log("newWidth", newWidth);
+    };
+
+    if ($.browser["webkit"]) {
+        $(window).resize(adjustScrollbarForZoom);
+        adjustScrollbarForZoom();
+    }
 };
 
 TilavaTable.prototype.appendRecord = function(record) {
