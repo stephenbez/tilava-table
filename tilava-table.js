@@ -111,7 +111,6 @@ window.TilavaTable = function(spec) {
         var screenCssPixelRatio = (window.outerWidth - 8) / window.innerWidth;
         var newWidth = Math.ceil(15/screenCssPixelRatio);
         $("." + that.spec.scrollbarClassName).css("right", -newWidth).css("width", newWidth);
-        console.log("newWidth", newWidth);
     };
 
     if ($.browser["webkit"]) {
