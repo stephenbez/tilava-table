@@ -60,6 +60,7 @@ window.TilavaTable = function(spec) {
 
     this.spec.displayReversed = this.spec.displayReversed || false;
     this.spec.tableWrapperClassName = this.spec.tableWrapperClassName || 'tilava-table-wrapper';
+    this.spec.outerTableWrapperClassName = this.spec.outerTableWrapperClassName || 'tilava-table-outer-wrapper';
     this.spec.scrollbarClassName = this.spec.scrollbarClassName || 'tilava-table-scrollbar';
 
     if (this.spec.visibleRows === Infinity) {
@@ -79,6 +80,11 @@ window.TilavaTable = function(spec) {
 
     var $beforeDiv = $('<div class="' + this.spec.tableWrapperClassName  + '" style="position: relative; display: inline-block;"/>');
     $table.wrap($beforeDiv);
+
+    var $outerDiv = $('<div class="' + this.spec.outerTableWrapperClassName + '" style="margin-right: 15px;"/>')
+    $("." + this.spec.tableWrapperClassName).wrap($outerDiv);
+
+
     this.$spacer = $('<div style="width: 1px" />');
     this.$scrollbarDiv = $('<div class="' + this.spec.scrollbarClassName + '" style="position: absolute; right: -15px; top: 0; bottom: 0; overflow-y: scroll; overflow-x: hidden; display: none; width: 15px;"/>');
     this.$scrollbarDiv.append(this.$spacer);
@@ -111,6 +117,8 @@ window.TilavaTable = function(spec) {
         var screenCssPixelRatio = (window.outerWidth - 8) / window.innerWidth;
         var newWidth = Math.ceil(15/screenCssPixelRatio);
         $("." + that.spec.scrollbarClassName).css("right", -newWidth).css("width", newWidth);
+
+        $table.parent().parent().css("margin-right", newWidth);
     };
 
     if ($.browser["webkit"]) {

@@ -34,10 +34,6 @@ Frequently Asked Questions
 ####How can I make the table as wide as the browser window?####
 Use the following style:
 
-    #<id of parent of tilava-table-wrapper> {
-        margin-right: 15px;
-    }
-    
     .tilava-table-wrapper {
         width: 100%;
     }
