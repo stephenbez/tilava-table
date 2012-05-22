@@ -51,6 +51,9 @@ function bound(number, lower, upper) {
  *   tableWrapperClassName [string] (default: 'tilava-table-wrapper')
  *     The name of the CSS class name used to wrap the table.
  *
+ *   outerTableWrapperClassName [string] (default: 'tilava-table-outer-wrapper')
+ *     The name of the outer CSS class name used to wrap the table.
+ 
  *   scrollbarClassName [string] (default: 'tilava-table-scrollbar')
  *     The name of the CSS class name used for the scrollbar div.
  */
@@ -81,9 +84,8 @@ window.TilavaTable = function(spec) {
     var $beforeDiv = $('<div class="' + this.spec.tableWrapperClassName  + '" style="position: relative; display: inline-block;"/>');
     $table.wrap($beforeDiv);
 
-    var $outerDiv = $('<div class="' + this.spec.outerTableWrapperClassName + '" style="margin-right: 15px;"/>')
-    $("." + this.spec.tableWrapperClassName).wrap($outerDiv);
-
+    var $outerDiv = $('<div class="' + this.spec.outerTableWrapperClassName + '" style="margin-right: 15px;"/>');
+    $table.parent().wrap($outerDiv);
 
     this.$spacer = $('<div style="width: 1px" />');
     this.$scrollbarDiv = $('<div class="' + this.spec.scrollbarClassName + '" style="position: absolute; right: -15px; top: 0; bottom: 0; overflow-y: scroll; overflow-x: hidden; display: none; width: 15px;"/>');
