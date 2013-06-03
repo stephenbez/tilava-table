@@ -123,7 +123,7 @@ window.TilavaTable = function(spec) {
         $table.parent().parent().css("margin-right", newWidth);
     };
 
-    if ($.browser["webkit"]) {
+    if (navigator.userAgent.toLowerCase().indexOf("webkit") != -1) {
         $(window).resize(adjustScrollbarForZoom);
         adjustScrollbarForZoom();
     }
